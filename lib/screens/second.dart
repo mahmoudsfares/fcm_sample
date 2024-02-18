@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class SecondScreen extends StatelessWidget {
@@ -9,16 +8,9 @@ class SecondScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final RemoteMessage message = ModalRoute.of(context)!.settings.arguments as RemoteMessage;
-    String body = (message.notification?.body)!;
     return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Text(
-          body,
-          style: const TextStyle(fontSize: 20),
-        ),
-      ),
+      appBar: AppBar(title: const Text('second')),
+      body: const Center(child: Text('this is the second screen'),),
     );
   }
 }
