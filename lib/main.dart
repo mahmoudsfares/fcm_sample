@@ -1,7 +1,6 @@
-import 'package:fcm_sample/api/firebase_api.dart';
-import 'package:fcm_sample/screens/home.dart';
-import 'package:fcm_sample/screens/notification_data.dart';
-import 'package:fcm_sample/screens/second.dart';
+import 'package:fcm_sample/screens/home_screen.dart';
+import 'package:fcm_sample/screens/notification_data_screen.dart';
+import 'package:fcm_sample/screens/second_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +9,6 @@ final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await FirebaseApi.initNotifications();
   runApp(const MyApp());
 }
 
