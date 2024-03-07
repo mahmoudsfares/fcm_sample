@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.pushNamed(context, NotificationDataScreen.route, arguments: payload);
       });
       // TODO: uncomment this to test with this screen as a splash screen
-      Future.delayed(Duration.zero, () => Navigator.pushNamed(context, SecondScreen.route));
+      Future.delayed(Durations.extralong4, () => Navigator.pushNamed(context, SecondScreen.route));
     }
   }
 
