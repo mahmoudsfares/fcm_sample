@@ -8,14 +8,11 @@ import 'package:permission_handler/permission_handler.dart';
 
 @pragma('vm:entry-point')
 Future<void> handleMessage(RemoteMessage firebaseRemoteMessage) async {
-  final RemoteNotification? notification = firebaseRemoteMessage.notification;
-  if (notification == null) {
-    return;
-  }
+  final Map<String, dynamic> data = firebaseRemoteMessage.data;
   NotificationsApi._triggerNotification(
     firebaseRemoteMessage.hashCode,
-    notification.title!,
-    notification.body!,
+    data['title'],
+    data['body'],
     payload: jsonEncode(firebaseRemoteMessage.data),
   );
 }
