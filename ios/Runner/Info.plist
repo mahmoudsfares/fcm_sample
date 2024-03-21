@@ -26,8 +26,6 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
-	<key>GoogleUtilitiesAppDelegateProxyEnabled</key>
-    <false/>
 	<key>FirebaseAutomaticScreenReportingEnabled</key>
 	<false/>
 	<key>LSApplicationCategoryType</key>
