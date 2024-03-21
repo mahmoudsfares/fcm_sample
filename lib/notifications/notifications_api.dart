@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -13,7 +12,7 @@ Future<void> handleMessage(RemoteMessage firebaseRemoteMessage) async {
     firebaseRemoteMessage.hashCode,
     data['title'],
     data['body'],
-    payload: jsonEncode(firebaseRemoteMessage.data),
+    payload: data['payload'],
   );
 }
 
