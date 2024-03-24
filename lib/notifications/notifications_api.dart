@@ -56,6 +56,7 @@ class NotificationsApi {
       'high_importance_channel',
       'High Importance Notifications',
       channelDescription: 'this channel is used for important notifications',
+      importance: Importance.high,
       icon: '@drawable/ic_launcher',
     );
 
