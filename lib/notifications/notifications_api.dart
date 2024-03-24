@@ -7,12 +7,11 @@ import 'package:permission_handler/permission_handler.dart';
 
 @pragma('vm:entry-point')
 Future<void> handleMessage(RemoteMessage firebaseRemoteMessage) async {
-  final RemoteNotification? data = firebaseRemoteMessage.notification;
-  if(data == null) return;
+  final data = firebaseRemoteMessage.data;
   NotificationsApi._triggerNotification(
     firebaseRemoteMessage.hashCode,
-    data.title!,
-    data.body!,
+    data['title'],
+    data['body'],
     payload: null,
   );
 }
@@ -32,6 +31,7 @@ class NotificationsApi {
   }
 
   static Future<void> _initFCMNotifications() async {
+    FirebaseMessaging.onBackgroundMessage(handleMessage);
     FirebaseMessaging.onMessage.listen(handleMessage);
   }
 
