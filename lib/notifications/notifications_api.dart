@@ -5,16 +5,30 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+// TODO: uncomment this to receive data payload
 @pragma('vm:entry-point')
 Future<void> handleMessage(RemoteMessage firebaseRemoteMessage) async {
-  final data = firebaseRemoteMessage.data;
+  final Map<String, dynamic> data = firebaseRemoteMessage.data;
   NotificationsApi._triggerNotification(
     firebaseRemoteMessage.hashCode,
     data['title'],
     data['body'],
-    payload: null,
+    payload: data['payload'],
   );
 }
+
+// TODO: uncomment this to receive notification payload
+// @pragma('vm:entry-point')
+// Future<void> handleMessage(RemoteMessage firebaseRemoteMessage) async {
+//   final RemoteNotification? data = firebaseRemoteMessage.notification;
+//   if(data == null) return;
+//   NotificationsApi._triggerNotification(
+//     firebaseRemoteMessage.hashCode,
+//     data.title!,
+//     data.body!,
+//     payload: null,
+//   );
+// }
 
 class NotificationsApi {
   static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
