@@ -1,37 +1,46 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 // TODO: uncomment this to receive data payload
+// @pragma('vm:entry-point')
+// Future<void> handleMessage(RemoteMessage firebaseRemoteMessage) async {
+//   final Map<String, dynamic> data = firebaseRemoteMessage.data;
+//   if(Platform.isAndroid){
+//     NotificationsApi._triggerNotification(
+//       firebaseRemoteMessage.hashCode,
+//       data['title'],
+//       data['body'],
+//       payload: data['payload'],
+//     );
+//   }
+// }
+
+// TODO: uncomment this to receive notification payload
 @pragma('vm:entry-point')
 Future<void> handleMessage(RemoteMessage firebaseRemoteMessage) async {
-  final Map<String, dynamic> data = firebaseRemoteMessage.data;
+  final RemoteNotification? data = firebaseRemoteMessage.notification;
+  if(data == null) return;
   NotificationsApi._triggerNotification(
     firebaseRemoteMessage.hashCode,
-    data['title'],
-    data['body'],
-    payload: data['payload'],
+    data.title!,
+    data.body!,
+    payload: null,
   );
 }
 
-// TODO: uncomment this to receive notification payload
-// @pragma('vm:entry-point')
-// Future<void> handleMessage(RemoteMessage firebaseRemoteMessage) async {
-//   final RemoteNotification? data = firebaseRemoteMessage.notification;
-//   if(data == null) return;
-//   NotificationsApi._triggerNotification(
-//     firebaseRemoteMessage.hashCode,
-//     data.title!,
-//     data.body!,
-//     payload: null,
-//   );
-// }
-
 class NotificationsApi {
+
+
+  static BuildContext? _context;
+  static void setContext (BuildContext context) => _context ??= context;
+
   static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  static Future<RemoteMessage?> get initialMessage async => await _firebaseMessaging.getInitialMessage();
   static final FlutterLocalNotificationsPlugin localNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   static final StreamController<String> notificationStream = StreamController<String>();
@@ -45,7 +54,6 @@ class NotificationsApi {
   }
 
   static Future<void> _initFCMNotifications() async {
-    FirebaseMessaging.onBackgroundMessage(handleMessage);
     FirebaseMessaging.onMessage.listen(handleMessage);
   }
 
