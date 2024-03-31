@@ -24,30 +24,26 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    NotificationsApi.setContext(context);
     _initNotifications();
-  }
-
-  void _initNotifications() async {
-    await NotificationsApi.initNotifications();
     // firebase notification was tapped while the app is terminated
     if (widget.message != null) {
-      Fluttertoast.showToast(msg: 'firebase terminated');
-      Future.delayed(Duration.zero, () async {
-        Navigator.pushNamed(context, NotificationDataScreen.route, arguments: jsonEncode(widget.message!.data));
-      });
+      Navigator.pushNamed(context, NotificationDataScreen.route, arguments: jsonEncode(widget.message!.data));
     }
     // firebase notification was tapped while the app is in background
     fcmStream = FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      Fluttertoast.showToast(msg: 'firebase background');
+      Fluttertoast.showToast(msg: 'firebase back');
       Map<String, dynamic> payload = message.data;
       Navigator.pushNamed(context, NotificationDataScreen.route, arguments: jsonEncode(payload));
     });
+  }
+
+  Future<void> _initNotifications() async {
+    await NotificationsApi.initNotifications();
     NotificationAppLaunchDetails? initialNotification =
         await NotificationsApi.localNotificationsPlugin.getNotificationAppLaunchDetails();
     // local notification was tapped while the app is in background
     if (initialNotification != null && initialNotification.didNotificationLaunchApp == true) {
-      Fluttertoast.showToast(msg: 'local background');
+      Fluttertoast.showToast(msg: 'local back');
       String? payload = initialNotification.notificationResponse?.payload;
       // avoid using context across an async gap by ensuring that the context is used after the current frame is rendered
       Future.delayed(
@@ -61,7 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       // local notification was tapped while the app is in foreground
       localNotificationStream = NotificationsApi.notificationStream.stream.listen((payload) {
-        Fluttertoast.showToast(msg: 'local foreground');
         Navigator.pushNamed(context, NotificationDataScreen.route, arguments: payload);
       });
       // TODO: uncomment this to test with this screen as a splash screen

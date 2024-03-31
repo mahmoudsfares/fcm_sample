@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -19,11 +18,6 @@ Future<void> handleMessage(RemoteMessage firebaseRemoteMessage) async {
 }
 
 class NotificationsApi {
-
-  // the context is needed to navigate when a notification is tapped
-  static BuildContext? _context;
-  static void setContext (BuildContext context) => _context ??= context;
-
   static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   // accessed by the first screen to get the message data
   static Future<RemoteMessage?> get initialMessage async => await _firebaseMessaging.getInitialMessage();
