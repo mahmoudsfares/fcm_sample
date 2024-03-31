@@ -6,7 +6,6 @@ import 'package:fcm_sample/screens/second_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeScreen extends StatefulWidget {
   final RemoteMessage? message;
@@ -25,25 +24,14 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _initNotifications();
-    // firebase notification was tapped while the app is terminated
-    if (widget.message != null) {
-      Navigator.pushNamed(context, NotificationDataScreen.route, arguments: jsonEncode(widget.message!.data));
-    }
-    // firebase notification was tapped while the app is in background
-    fcmStream = FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      Fluttertoast.showToast(msg: 'firebase back');
-      Map<String, dynamic> payload = message.data;
-      Navigator.pushNamed(context, NotificationDataScreen.route, arguments: jsonEncode(payload));
-    });
+    _triggerFCMOnClickListeners();
   }
 
   Future<void> _initNotifications() async {
     await NotificationsApi.initNotifications();
-    NotificationAppLaunchDetails? initialNotification =
-        await NotificationsApi.localNotificationsPlugin.getNotificationAppLaunchDetails();
+    NotificationAppLaunchDetails? initialNotification = await NotificationsApi.localNotificationsPlugin.getNotificationAppLaunchDetails();
     // local notification was tapped while the app is in background
     if (initialNotification != null && initialNotification.didNotificationLaunchApp == true) {
-      Fluttertoast.showToast(msg: 'local back');
       String? payload = initialNotification.notificationResponse?.payload;
       // avoid using context across an async gap by ensuring that the context is used after the current frame is rendered
       Future.delayed(
@@ -64,6 +52,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _triggerFCMOnClickListeners() {
+    // firebase notification was tapped while the app is terminated
+    if (widget.message != null) {
+      Navigator.pushNamed(context, NotificationDataScreen.route, arguments: jsonEncode(widget.message!.data));
+    }
+    // firebase notification was tapped while the app is in background
+    fcmStream = FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      Map<String, dynamic> payload = message.data;
+      Navigator.pushNamed(context, NotificationDataScreen.route, arguments: jsonEncode(payload));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,8 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    fcmStream.cancel();
     localNotificationStream.cancel();
+    fcmStream.cancel();
     super.dispose();
   }
 }
