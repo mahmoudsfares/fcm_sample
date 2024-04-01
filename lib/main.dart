@@ -9,9 +9,12 @@ import 'package:flutter/material.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
+  // TODO 15: ensure widgets binding initialization
   WidgetsFlutterBinding.ensureInitialized();
+  // TODO 16: initialize firebase and check for initial message in case the app was opened by tapping a notification while terminated
   await Firebase.initializeApp();
   final RemoteMessage? message = await NotificationsApi.initialMessage;
+  // TODO 17: pass the message to the first screen to use the payload to navigate and show data
   runApp(MyApp(message));
 }
 

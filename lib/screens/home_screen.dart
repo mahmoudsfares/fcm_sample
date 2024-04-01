@@ -17,16 +17,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  // TODO 18: define the stream subscriptions for both FCMs and local notifications to cancel them on dispose
   late final StreamSubscription<RemoteMessage> fcmStream;
   late final StreamSubscription<String> localNotificationStream;
 
   @override
   void initState() {
     super.initState();
+    // TODO 19: call these on init to initialize the notifications and listen to them
     _initNotifications();
     _triggerFCMOnClickListeners();
   }
 
+  // TODO 20: initialize notifications and initialize local notification listeners to take action upon them by navigating and showing the payload data
   Future<void> _initNotifications() async {
     await NotificationsApi.initNotifications();
     NotificationAppLaunchDetails? initialNotification = await NotificationsApi.localNotificationsPlugin.getNotificationAppLaunchDetails();
@@ -52,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // TODO 21: initialize FCMs listeners to take action upon them by navigating and showing the payload data
   void _triggerFCMOnClickListeners() {
     // firebase notification was tapped while the app is terminated
     if (widget.message != null) {
@@ -82,6 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    // TODO 22: cancel stream subscriptions
     localNotificationStream.cancel();
     fcmStream.cancel();
     super.dispose();
