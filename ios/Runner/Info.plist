@@ -24,7 +24,7 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<!-- TODO 5: disable firebase app delegate proxy -->
+	<!-- TODO 6: disable firebase app delegate proxy -->
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
 	<key>FirebaseAutomaticScreenReportingEnabled</key>
@@ -35,7 +35,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<!-- TODO 6: define the background modes -->
+	<!-- TODO 7: define the background modes -->
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>

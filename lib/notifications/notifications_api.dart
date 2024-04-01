@@ -6,19 +6,19 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class NotificationsApi {
-  // TODO 7: keep an instance of Firebase messaging and create a getter for the initial message
+  // TODO 8: keep an instance of Firebase messaging and create a getter for the initial message
   static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   // accessed by the first screen to get the message data
   static Future<RemoteMessage?> get initialMessage async => await _firebaseMessaging.getInitialMessage();
 
-  // TODO 8: create an instance of the local notifications plugin.. it is used to initialize and show push notifications on demand
+  // TODO 9: create an instance of the local notifications plugin.. it is used to initialize and show push notifications on demand
   static final FlutterLocalNotificationsPlugin localNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  // TODO 9: create a stream and use it to listen to the newly triggered notifications to pass the payload to it
+  // TODO 10: create a stream and use it to listen to the newly triggered notifications to pass the payload to it
   static final StreamController<String> notificationStream = StreamController<String>();
   static void onTapNotification(NotificationResponse response) => notificationStream.add(response.payload!);
 
-  // TODO 10: this method will be called on app start to initialize notifications
+  // TODO 11: this method will be called on app start to initialize notifications
   static Future<void> initNotifications() async {
     final String? FCMToken = await _firebaseMessaging.getToken();
     print('Token: $FCMToken');
@@ -26,7 +26,7 @@ class NotificationsApi {
     _initFCMNotifications();
   }
 
-  // TODO 11: initialize local push notifications by defining the settings for each platform
+  // TODO 12: initialize local push notifications by defining the settings for each platform
   static Future<void> _initLocalNotifications() async {
     if (!(await _checkNotificationsPermission())) return;
     DarwinInitializationSettings iOS = const DarwinInitializationSettings(
@@ -43,7 +43,7 @@ class NotificationsApi {
     );
   }
 
-  // TODO 12: check notification permission to request it if it isn't granted
+  // TODO 13: check notification permission to request it if it isn't granted
   static Future<bool> _checkNotificationsPermission() async {
     if (await Permission.notification.isDenied) {
       PermissionStatus status = await Permission.notification.request();
@@ -55,13 +55,13 @@ class NotificationsApi {
     return true;
   }
 
-  // TODO 13: initialize firebase notifications by listening to the foreground ones and defining what to do when a foreground one is received
+  // TODO 14: initialize firebase notifications by listening to the foreground ones and defining what to do when a foreground one is received
   static Future<void> _initFCMNotifications() async {
     // this listener is for foreground messages, background messages are created automatically
     FirebaseMessaging.onMessage.listen(handleMessage);
   }
 
-  // TODO 14: this will be invoked when an fcm is received in the foreground
+  // TODO 15: this will be invoked when an fcm is received in the foreground
   static Future<void> handleMessage(RemoteMessage firebaseRemoteMessage) async {
     final RemoteNotification? notification = firebaseRemoteMessage.notification;
     if(notification == null) return;
@@ -73,7 +73,7 @@ class NotificationsApi {
     );
   }
 
-  // TODO 15: define the notification details and trigger it upon request
+  // TODO 16: define the notification details and trigger it upon request
   static Future<void> _triggerNotification(int id, String title, String body, {String? payload}) async {
     AndroidNotificationDetails androidDetails = const AndroidNotificationDetails(
       'high_importance_channel',
