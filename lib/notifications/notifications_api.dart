@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 class NotificationsApi {
   // TODO 8: keep an instance of Firebase messaging and create a getter for the initial message
   static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
   // accessed by the first screen to get the message data
   static Future<RemoteMessage?> get initialMessage async => await _firebaseMessaging.getInitialMessage();
 
@@ -16,7 +17,10 @@ class NotificationsApi {
 
   // TODO 10: create a stream and use it to listen to the newly triggered notifications to pass the payload to it
   static final StreamController<String> notificationStream = StreamController<String>();
-  static void onTapNotification(NotificationResponse response) => notificationStream.add(response.payload!);
+
+  static void onTapNotification(NotificationResponse response) {
+    notificationStream.add(response.payload!);
+  }
 
   // TODO 11: this method will be called on app start to initialize notifications
   static Future<void> initNotifications() async {
@@ -64,7 +68,7 @@ class NotificationsApi {
   // TODO 15: this will be invoked when an fcm is received in the foreground
   static Future<void> handleMessage(RemoteMessage firebaseRemoteMessage) async {
     final RemoteNotification? notification = firebaseRemoteMessage.notification;
-    if(notification == null) return;
+    if (notification == null) return;
     NotificationsApi._triggerNotification(
       firebaseRemoteMessage.hashCode,
       notification.title!,

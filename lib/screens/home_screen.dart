@@ -1,95 +1,41 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:fcm_sample/notifications/notifications_api.dart';
-import 'package:fcm_sample/screens/notification_data_screen.dart';
 import 'package:fcm_sample/screens/second_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   final RemoteMessage? message;
 
   const HomeScreen(this.message, {super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-
   // TODO 20: define the stream subscriptions for both FCMs and local notifications to cancel them on dispose
-  late final StreamSubscription<RemoteMessage> fcmStream;
-  late final StreamSubscription<String> localNotificationStream;
+  // late final StreamSubscription<RemoteMessage> fcmStream;
+  // late final StreamSubscription<String> localNotificationStream;
 
-  @override
-  void initState() {
-    super.initState();
-    // TODO 21: call these on init to initialize the notifications and listen to them
-    _initNotifications();
-    _triggerFCMOnClickListeners();
-  }
-
-  // TODO 22: initialize notifications and initialize local notification listeners to take action upon them by navigating and showing the payload data
-  Future<void> _initNotifications() async {
+  // TODO 22: initialize notifications and navigate to post-splash screen
+  Future<void> _initNotifications(BuildContext context) async {
     await NotificationsApi.initNotifications();
-    NotificationAppLaunchDetails? initialNotification = await NotificationsApi.localNotificationsPlugin.getNotificationAppLaunchDetails();
-    // local notification was tapped while the app is in background
-    if (initialNotification != null && initialNotification.didNotificationLaunchApp == true) {
-      String? payload = initialNotification.notificationResponse?.payload;
-      // avoid using context across an async gap by ensuring that the context is used after the current frame is rendered
-      Future.delayed(
-        Duration.zero,
-        () => Navigator.pushNamed(
-          context,
-          NotificationDataScreen.route,
-          arguments: payload,
-        ),
-      );
-    } else {
-      // local notification was tapped while the app is in foreground
-      localNotificationStream = NotificationsApi.notificationStream.stream.listen((payload) {
-        Navigator.pushNamed(context, NotificationDataScreen.route, arguments: payload);
-      });
-      // TODO: uncomment this to test with this screen as a splash screen
-      // Future.delayed(Durations.extralong4, () => Navigator.pushNamed(context, SecondScreen.route));
-    }
-  }
-
-  // TODO 23: initialize FCMs listeners to take action upon them by navigating and showing the payload data
-  void _triggerFCMOnClickListeners() {
-    // firebase notification was tapped while the app is terminated
-    if (widget.message != null) {
-      Navigator.pushNamed(context, NotificationDataScreen.route, arguments: jsonEncode(widget.message!.data));
-    }
-    // firebase notification was tapped while the app is in background
-    fcmStream = FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      Map<String, dynamic> payload = message.data;
-      Navigator.pushNamed(context, NotificationDataScreen.route, arguments: jsonEncode(payload));
-    });
+    Future.delayed(Durations.extralong4, () => Navigator.pushReplacementNamed(context, SecondScreen.route, arguments: message));
   }
 
   @override
   Widget build(BuildContext context) {
+    // TODO 21: call these on init to initialize the notifications
+    _initNotifications(context);
     return Scaffold(
       appBar: AppBar(title: const Text('home')),
-      body: Center(
-        // TODO: uncomment this to test with this screen as a splash screen
-        // child: Text('Loading..'),
-        // TODO: uncomment this to test with this screen as a normal screen
-        child: ElevatedButton(
-          child: const Text('Go to second screen'),
-          onPressed: () => Navigator.pushNamed(context, SecondScreen.route),
-        ),
+      body: const Center(
+        child: Text('Loading..'),
       ),
     );
   }
 
-  @override
-  void dispose() {
-    // TODO 24: cancel stream subscriptions
-    localNotificationStream.cancel();
-    fcmStream.cancel();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // TODO 23: cancel stream subscriptions
+  //   // localNotificationStream.cancel();
+  //   // fcmStream.cancel();
+  //   super.dispose();
+  // }
 }
