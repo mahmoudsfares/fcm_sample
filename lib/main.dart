@@ -1,5 +1,5 @@
 import 'package:fcm_sample/notifications/notifications_api.dart';
-import 'package:fcm_sample/screens/home_screen.dart';
+import 'package:fcm_sample/screens/first_screen.dart';
 import 'package:fcm_sample/screens/notification_data_screen.dart';
 import 'package:fcm_sample/screens/second_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomeScreen(message),
+      home: FirstScreen(message),
       routes: {
         SecondScreen.route: (context) => const SecondScreen(),
         NotificationDataScreen.route: (context) => const NotificationDataScreen(),
