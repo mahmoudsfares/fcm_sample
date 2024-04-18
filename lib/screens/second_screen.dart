@@ -9,7 +9,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class SecondScreen extends StatefulWidget {
   static const String route = "/second";
 
-  const SecondScreen({super.key});
+  final RemoteMessage? message;
+
+  const SecondScreen(this.message, {super.key});
 
   @override
   State<SecondScreen> createState() => _SecondScreenState();
@@ -35,9 +37,6 @@ class _SecondScreenState extends State<SecondScreen> {
   void _triggerNotificationsListeners(BuildContext context) async {
     // local notification
     NotificationAppLaunchDetails? initialNotification = await NotificationsApi.localNotificationsPlugin.getNotificationAppLaunchDetails();
-    // fcm notification
-    RemoteMessage? message;
-    await Future.delayed(Duration.zero, () => message = getRemoteMessage(context));
     // local notification was tapped while the app is in foreground
     localNotificationStream = NotificationsApi.notificationStream.stream.listen((payload) {
       Future.delayed(Duration.zero, () => Navigator.pushNamed(context, NotificationDataScreen.route, arguments: payload));
@@ -54,13 +53,9 @@ class _SecondScreenState extends State<SecondScreen> {
       Future.delayed(Duration.zero, () => Navigator.pushNamed(context, NotificationDataScreen.route, arguments: payload));
     }
     // firebase notification was tapped while the app is terminated
-    else if (message != null) {
-      Future.delayed(Duration.zero, () => Navigator.pushNamed(context, NotificationDataScreen.route, arguments: jsonEncode(message!.data)));
+    else if (widget.message != null) {
+      Future.delayed(Duration.zero, () => Navigator.pushNamed(context, NotificationDataScreen.route, arguments: jsonEncode(widget.message!.data)));
     }
-  }
-
-  RemoteMessage? getRemoteMessage(BuildContext context) {
-    return ModalRoute.of(context)!.settings.arguments as RemoteMessage?;
   }
 
   @override

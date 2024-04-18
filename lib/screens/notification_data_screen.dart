@@ -10,7 +10,7 @@ class NotificationDataScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String text = decodePayload(context)['text'];
+    final String text = decodePayload(context)['data'];
     return Scaffold(
       appBar: AppBar(title: const Text('notification data')),
       body: Center(
