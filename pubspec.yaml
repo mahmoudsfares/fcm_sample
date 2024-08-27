@@ -18,6 +18,8 @@ dependencies:
   firebase_analytics: ^10.4.5
   flutter_local_notifications: ^15.1.1
   permission_handler: ^11.3.0
+  # Migration TODO 1: a package that gets access token with OAuth2
+  googleapis_auth: ^1.6.0
   fluttertoast: ^8.2.4
 
 dev_dependencies:
