@@ -26,7 +26,10 @@ Send a notification to both Android and iOS.
 }
 ```
 * the notification is rigid and can't be changed it must have the value of sound as default, the title and body values can be changed but not the keys
-* data is a map of string, if you have a nested JSON  you need to expect an escaped characters as implemented for "keysAndValues", you can parse it later in your flutter app to remove the escape characters by using [yourNestedJsonString.replaceAll(r'\"', '"')]
+* data is a map of string, if you have a nested JSON  you need to expect an escaped characters as implemented for "keysAndValues", you can parse it later in your flutter app to remove the escape characters by using
+```dart
+yourNestedJsonString.replaceAll(r'\"', '"');
+```
 * data can be changed to suit the required payload data but the notification data screen should be changed according to the structure of data
 * follow the FCM documentations to setup firebase and FCM correctly, pay attention specifically to apple developer account settings
 * notifications don't work on iOS simulators and aren't stable on Android emulators.. better test on real devices
