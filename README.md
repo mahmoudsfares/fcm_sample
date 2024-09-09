@@ -44,6 +44,20 @@ yourNestedJsonString.replaceAll(r'\"', '"');
 
 ### Steps
 * Instead of a POST request to https://fcm.googleapis.com/fcm/send, make a POST request to https://fcm.googleapis.com/v1/projects/myproject-ID/messages:send This myproject-ID is available in the General project settings tab of the Firebase console.
+* The below body format is replaced with the body format mentioned above
+```json
+{ 
+  "to": "FCM_TOKEN",
+  "notification": { 
+    "sound": "default", 
+    "title": "Goal!", 
+    "body": "Leicester 1 - 0 Coventry" 
+    }, 
+    "data": { 
+      "text": "Jamie Vardy, 81" 
+    } 
+}
+```
 * Server key is removed from firebase console, you don't need to send it in Authorization header as [Authorization : key = <server_key>] anymore
 * Instead of Server key, you need to send OAuth 2.0 token as [Authorization: Bearer <valid Oauth 2.0 token>], It needs to be generated continuously because it continuously expires.
 * To generate this OAuth 2.0 token, Postman manages its integration, After adding the above url to a POST request, go to Authorization section and choose Firebase cloud messaging API then click on the Authorize button
