@@ -25,11 +25,11 @@ Send a notification to both Android and iOS.
   }
 }
 ```
-* the notification is rigid and can't be changed it must have the value of sound as default, the title and body values can be changed but not the keys
-* data is a map of string, if you have a nested JSON  you need to expect an escaped characters as implemented for "keysAndValues", you can parse it later in your flutter app to remove the escape characters by using
+* data is a Map<String, String>, if you have a nested JSON  you need to expect an escaped characters as implemented for "keysAndValues", you can parse it later in your flutter app to remove the escape characters by using
 ```dart
 yourNestedJsonString.replaceAll(r'\"', '"');
 ```
+* the notification is rigid and can't be changed it must have the value of sound as default, the title and body values can be changed but not the keys
 * data can be changed to suit the required payload data but the notification data screen should be changed according to the structure of data
 * follow the FCM documentations to setup firebase and FCM correctly, pay attention specifically to apple developer account settings
 * notifications don't work on iOS simulators and aren't stable on Android emulators.. better test on real devices
@@ -48,6 +48,7 @@ yourNestedJsonString.replaceAll(r'\"', '"');
 * Instead of Server key, you need to send OAuth 2.0 token as [Authorization: Bearer <valid Oauth 2.0 token>], It needs to be generated continuously because it continuously expires.
 * To generate this OAuth 2.0 token, Postman manages its integration, After adding the above url to a POST request, go to Authorization section and choose Firebase cloud messaging API then click on the Authorize button
 * Or to generate this OAuth 2.0 token using flutter [not required], you can follow the 5 Migration TODOs steps in the migrate-legacy-fcm-apis-to-http-v1 branch
+* Unlike the legacy messaging API, the HTTP v1 API does not support nested JSON values in the data field. A conversion from JSON to string is required. (this is demonstrated in the json and dart codes above)
 
 For more info check https://firebase.google.com/docs/cloud-messaging/migrate-v1
 
