@@ -4,6 +4,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
+// Migration TODO 2: import the package
+import 'package:googleapis_auth/auth_io.dart' as auth;
 
 class NotificationsApi {
   // TODO 8: keep an instance of Firebase messaging and create a getter for the initial message
@@ -103,5 +105,46 @@ class NotificationsApi {
       payload: payload,
       NotificationDetails(android: androidDetails, iOS: iosDetails),
     );
+  }
+
+  // Migration TODO 3: this function will be called to get the access token
+  static Future<String?> getAccessToken() async {
+    // Migration TODO 4: to get this data go to: Firebase console > Project settings > Service accounts > Generate new private key
+    final serviceAccountJson = {
+      "type": "",
+      "project_id": "",
+      "private_key_id": "",
+      "private_key": "",
+      "client_id": "",
+      "auth_uri": "",
+      "token_uri": "",
+      "auth_provider_x509_cert_url": "",
+      "client_x509_cert_url": "",
+      "universe_domain": ""
+    };
+
+    List<String> scopes = [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/firebase.database",
+      "https://www.googleapis.com/auth/firebase.messaging"
+    ];
+
+    try {
+      final client = await auth.clientViaServiceAccount(
+          auth.ServiceAccountCredentials.fromJson(serviceAccountJson), scopes);
+
+      auth.AccessCredentials credentials =
+          await auth.obtainAccessCredentialsViaServiceAccount(
+              auth.ServiceAccountCredentials.fromJson(serviceAccountJson),
+              scopes,
+              client);
+
+      client.close();
+      print("Access Token: ${credentials.accessToken.data}");
+      return credentials.accessToken.data;
+    } catch (e) {
+      print("Error getting access token: $e");
+      return null;
+    }
   }
 }

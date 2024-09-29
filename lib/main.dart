@@ -13,6 +13,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // TODO 18: initialize firebase and check for initial message in case the app was opened by tapping a notification while terminated
   await Firebase.initializeApp();
+  // Migration TODO 5: call the function to use the printed access token
+  await NotificationsApi.getAccessToken();
   final RemoteMessage? message = await NotificationsApi.initialMessage;
   // TODO 19: pass the message to the first screen to use the payload to navigate and show data
   runApp(MyApp(message));
