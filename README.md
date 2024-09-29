@@ -6,7 +6,7 @@ Send a notification to both Android and iOS.
 
 * follow the numbered todos for a step-by-step guidance.. there are ones in AndroidManifest.xml, AppDelegate.swift & info.plist but might not show up in the todos tab.. make sure to check them out.
 * the app contains 3 screens: home, second, and notification data
-* home: can work as a first screen with the ability to navigate to the second one via a button and can work as a splash screen.. follow the TODOs without numbers to change the purpose
+* home: can work as a first screen with the ability to navigate to the second one via a button and can work as a splash screen.. follow the TODOs without numbers to change the functionality
 * second: the screen that shows after home
 * notification data: shows only when a notification is tapped to display the payload data
 * the sample is designed to receive the notification payload as follows:
@@ -19,13 +19,12 @@ Send a notification to both Android and iOS.
       "body": "Leicester 1 - 0 Coventry"
     },
     "data": {
-      "text": "Jamie Vardy, 81",
-      "keysAndValues": "{\"key1\": \"value1\", \"key2\": 123}"
+      "info": "{\"scorerName\": \"Jamie Vardy\", \"minute\": 81}"
     }
   }
 }
 ```
-* data is a Map<String, String>, if you have a nested JSON you need to expect an escaped characters as implemented for "keysAndValues", you can parse it later in your flutter app to remove the escaped characters by using
+* data is a Map<String, String>, if you have a nested JSON you need to expect a string with escaped characters, like the one implemented for "keysAndValues", you can parse it later in your flutter app to remove the escaped characters by using
 ```dart
 yourNestedJsonString.replaceAll(r'\"', '"');
 ```
@@ -40,7 +39,7 @@ yourNestedJsonString.replaceAll(r'\"', '"');
 ## Migrate from legacy FCM APIs to HTTP v1 Guide
 
 ### Why you need to Migrate?
-* FCM will start a gradual shutdown of deprecated APIs around July 22nd, 2024. After this date, deprecated services will be subject to a "flickering" process in which increasing numbers of requests will return error responses.
+* FCM started a gradual shutdown of the deprecated APIs around July 22nd, 2024. After this date, deprecated services will be subject to a "flickering" process in which increasing numbers of requests will return error responses.
 
 ### Steps
 * Instead of a POST request to https://fcm.googleapis.com/fcm/send, make a POST request to https://fcm.googleapis.com/v1/projects/myproject-ID/messages:send This myproject-ID is available in the General project settings tab of the Firebase console.
@@ -53,8 +52,11 @@ yourNestedJsonString.replaceAll(r'\"', '"');
     "title": "Goal!", 
     "body": "Leicester 1 - 0 Coventry" 
     }, 
-    "data": { 
-      "text": "Jamie Vardy, 81" 
+    "data": {
+      "info": {
+        "scorerName": "Jamie Vardy",
+        "minute": 81
+      }
     } 
 }
 ```

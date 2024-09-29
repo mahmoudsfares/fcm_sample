@@ -16,9 +16,9 @@ dependencies:
   firebase_messaging: ^14.6.6
   firebase_core: ^2.15.1
   firebase_analytics: ^10.4.5
-  flutter_local_notifications: ^15.1.1
+  flutter_local_notifications: ^17.2.3
   permission_handler: ^11.3.0
-  # Migration TODO 1: a package that gets access token with OAuth2
+  # TODO Migration 1: a package that gets access token with OAuth2
   googleapis_auth: ^1.6.0
   fluttertoast: ^8.2.4
 
