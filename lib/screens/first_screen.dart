@@ -4,15 +4,26 @@ import 'package:fcm_sample/screens/second_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-class FirstScreen extends StatelessWidget {
+class FirstScreen extends StatefulWidget {
   final RemoteMessage? message;
 
   const FirstScreen(this.message, {super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<FirstScreen> createState() => _FirstScreenState();
+}
+
+class _FirstScreenState extends State<FirstScreen> {
+
+  @override
+  void initState() {
+    super.initState();
     // TODO 20: initialize notifications and head to the next screen
-    _initNotifications(context);
+    _initNotifications();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Splash Screen')),
       body: const Center(
@@ -21,8 +32,8 @@ class FirstScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _initNotifications(BuildContext context) async {
+  Future<void> _initNotifications() async {
     await NotificationsApi.initNotifications();
-    Future.delayed(Durations.extralong4, () => Navigator.pushReplacementNamed(context, SecondScreen.route, arguments: message));
+    WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.pushReplacementNamed(context, SecondScreen.route, arguments: widget.message));
   }
 }
